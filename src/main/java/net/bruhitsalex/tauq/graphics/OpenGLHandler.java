@@ -1,6 +1,6 @@
 package net.bruhitsalex.tauq.graphics;
 
-import net.bruhitsalex.tauq.misc.Logger;
+import net.bruhitsalex.tauq.misc.Log;
 import net.bruhitsalex.tauq.misc.LoggerType;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
@@ -8,30 +8,28 @@ import org.lwjgl.opengl.GL11;
 
 public class OpenGLHandler {
 
-    private static int frameCount = 0;
-    private static double previousFrameTime = 0;
-    private static int fps;
+    private int frameCount = 0;
+    private double previousFrameTime = 0;
+    private int fps;
 
-    public static void loop() {
-        Logger.log(LoggerType.OPENGL, "Starting loop");
+    public void loop(TauqWindow parent) {
+        GL.createCapabilities();
+        Log.log(LoggerType.OPENGL, "Running OpenGL version " + GL11.glGetString(GL11.GL_VERSION));
+        Log.log(LoggerType.OPENGL, "Starting loop");
 
         GL.createCapabilities();
         GL11.glClearColor(0f, 0f, 0f, 0f);
 
-        while (!GLFW.glfwWindowShouldClose(GLFWHandler.getWindow())) {
+        while (!GLFW.glfwWindowShouldClose(parent.getWindow())) {
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-            GLFW.glfwSwapBuffers(GLFWHandler.getWindow());
+            GLFW.glfwSwapBuffers(parent.getWindow());
             GLFW.glfwPollEvents();
             calculateFPS();
             render();
         }
     }
 
-    private static void calculateFPS() {
-
-    }
-
-    private static void render() {
+    private void calculateFPS() {
         double currentTime = GLFW.glfwGetTime();
         frameCount++;
         if (currentTime - previousFrameTime >= 1.0) {
@@ -41,7 +39,11 @@ public class OpenGLHandler {
         }
     }
 
-    public static int getFps() {
+    private void render() {
+
+    }
+
+    public int getFPS() {
         return fps;
     }
 
