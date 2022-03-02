@@ -1,4 +1,4 @@
-package net.bruhitsalex.tauq.graphics.events.events;
+package net.bruhitsalex.tauq.graphics.events.io;
 
 public interface KeyPressEvent {
 
