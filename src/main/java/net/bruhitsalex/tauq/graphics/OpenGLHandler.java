@@ -1,10 +1,12 @@
 package net.bruhitsalex.tauq.graphics;
-
+import net.bruhitsalex.tauq.graphics.utils.Rectangle;
 import net.bruhitsalex.tauq.misc.Log;
 import net.bruhitsalex.tauq.misc.LoggerType;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 
 public class OpenGLHandler {
 
@@ -17,16 +19,25 @@ public class OpenGLHandler {
         Log.log(LoggerType.OPENGL, "Running OpenGL version " + GL11.glGetString(GL11.GL_VERSION));
         Log.log(LoggerType.OPENGL, "Starting loop");
 
-        GL.createCapabilities();
         GL11.glClearColor(0f, 0f, 0f, 0f);
 
         while (!GLFW.glfwWindowShouldClose(parent.getWindow())) {
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+            calculateFPS();
+
+            GL11.glMatrixMode(GL11.GL_PROJECTION);
+            GL11.glLoadIdentity();
+            GL11.glOrtho(0f, parent.getDisplayWidth(), parent.getDisplayHeight(), 0f, 0f, 1f);
+            GL11.glViewport(0, 0, parent.getDisplayWidth(), parent.getDisplayHeight());
+
+            render(parent);
+
             GLFW.glfwSwapBuffers(parent.getWindow());
             GLFW.glfwPollEvents();
-            calculateFPS();
-            render();
         }
+
+        Log.log(LoggerType.GLFW, "Terminating GLFW");
+        GLFW.glfwTerminate();
     }
 
     private void calculateFPS() {
@@ -39,8 +50,10 @@ public class OpenGLHandler {
         }
     }
 
-    private void render() {
-
+    private void render(TauqWindow parent) {
+        int x = parent.getDisplayWidth() / 2;
+        int y = parent.getDisplayHeight() / 2;
+        Rectangle.drawRect(x, y, x + 20, y + 20, Color.cyan);
     }
 
     public int getFPS() {
