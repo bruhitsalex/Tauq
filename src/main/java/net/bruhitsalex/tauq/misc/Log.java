@@ -1,21 +1,32 @@
 package net.bruhitsalex.tauq.misc;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+
 public class Log {
 
+    private static final Logger log = Logger.getLogger(Log.class);
+
     public static void log(LoggerType type, String text) {
-        System.out.println("[LOG] [" + type.name().toUpperCase() + "] " + text);
+        log.info("[" + type.name().toUpperCase() + "] " + text);
     }
 
     public static void warn(LoggerType type, String text) {
-        System.err.println("[WARN] [" + type.name().toUpperCase() + "] " + text);
+        log.warn("[" + type.name().toUpperCase() + "] " + text);
     }
 
     public static void error(LoggerType type, String text) {
-        System.err.println("[ERROR] [" + type.name().toUpperCase() + "] " + text);
+        log.error("[ERROR] [" + type.name().toUpperCase() + "] " + text);
     }
 
     public static void debug(String text) {
-        System.out.println("[DEBUG] " + text);
+        log.debug("[DEBUG] " + text);
+    }
+
+    static {
+        BasicConfigurator.configure(new ConsoleAppender(new PatternLayout("[%t] %p %x- %m%n")));
     }
 
 }
