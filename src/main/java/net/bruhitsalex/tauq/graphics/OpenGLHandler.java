@@ -6,8 +6,6 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
-
 public class OpenGLHandler {
 
     private int frameCount = 0;
@@ -51,9 +49,7 @@ public class OpenGLHandler {
     }
 
     private void render(TauqWindow parent) {
-        int x = parent.getDisplayWidth() / 2;
-        int y = parent.getDisplayHeight() / 2;
-        Rectangle.drawRect(x, y, x + 20, y + 20, Color.cyan);
+        parent.getMainPanel().draw();
     }
 
     public int getFPS() {
