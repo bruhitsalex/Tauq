@@ -18,11 +18,11 @@ public class Log {
     }
 
     public static void error(LoggerType type, String text) {
-        log.error("[ERROR] [" + type.name().toUpperCase() + "] " + text);
+        log.error("[" + type.name().toUpperCase() + "] " + text);
     }
 
     public static void debug(String text) {
-        log.debug("[DEBUG] " + text);
+        log.debug(text);
     }
 
     static {
