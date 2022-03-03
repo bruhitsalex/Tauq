@@ -1,9 +1,12 @@
 package net.bruhitsalex.tauq.graphics;
 
+import net.bruhitsalex.tauq.components.panels.TPanel;
 import net.bruhitsalex.tauq.graphics.events.EventHandler;
 import net.bruhitsalex.tauq.graphics.events.window.PixelCoords;
 import net.bruhitsalex.tauq.misc.Log;
 import net.bruhitsalex.tauq.misc.LoggerType;
+import net.bruhitsalex.tauq.theme.DebugTheme;
+import net.bruhitsalex.tauq.theme.Theme;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFW;
@@ -36,11 +39,19 @@ public class TauqWindow {
     private int displayWidth;
     private int displayHeight;
 
+    private final TPanel mainTPanel;
+    private Theme theme;
+
+    public TauqWindow() {
+        this.displayWidth = INIT_DISPLAY_WIDTH;
+        this.displayHeight = INIT_DISPLAY_HEIGHT;
+        this.theme = new DebugTheme();
+        this.mainTPanel = new TPanel(0, 0, displayWidth, displayHeight, this);
+    }
+
     public void start() {
         this.renderThread = new Thread(this::run);
         this.eventHandlers = new EventHandler();
-        this.displayWidth = INIT_DISPLAY_WIDTH;
-        this.displayHeight = INIT_DISPLAY_HEIGHT;
         renderThread.start();
     }
 
@@ -74,8 +85,7 @@ public class TauqWindow {
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+        glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
 
         window = glfwCreateWindow(INIT_DISPLAY_WIDTH, INIT_DISPLAY_HEIGHT, INIT_DISPLAY_TITLE, NULL, NULL);
 
@@ -106,6 +116,7 @@ public class TauqWindow {
             );
         }
 
+        glfwSetWindowSizeLimits(window, 200, 200, GLFW_DONT_CARE, GLFW_DONT_CARE);
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1); // vsync
         glfwShowWindow(window);
@@ -177,6 +188,18 @@ public class TauqWindow {
 
     public int getDisplayHeight() {
         return displayHeight;
+    }
+
+    public TPanel getMainPanel() {
+        return mainTPanel;
+    }
+
+    public Theme getTheme() {
+        return theme;
+    }
+
+    public void setTheme(Theme theme) {
+        this.theme = theme;
     }
 
 }
