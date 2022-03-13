@@ -11,8 +11,8 @@ public class Demo implements MouseClickEvent {
 
     public void start() {
         this.window = new TauqWindow();
+        window.getMainPanel().add(new TPanel(10, 20, 260, window.getDisplayHeight() - 20));
         window.start();
-        window.getMainPanel().add(new TPanel(10, 20, 26, 82));
         window.getEventHandler().getListeners().MOUSE_CLICK_LISTENERS.add(this);
     }
 

@@ -15,6 +15,7 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -34,10 +35,10 @@ public class TauqWindow {
     private OpenGLHandler renderer;
     private EventHandler eventHandlers;
 
-    private Thread renderThread;
-
     private int displayWidth;
     private int displayHeight;
+    private float scaleWidth = 1;
+    private float scaleHeight = 1;
 
     private final TPanel mainTPanel;
     private Theme theme;
@@ -50,9 +51,8 @@ public class TauqWindow {
     }
 
     public void start() {
-        this.renderThread = new Thread(this::run);
         this.eventHandlers = new EventHandler();
-        renderThread.start();
+        run();
     }
 
     private void run() {
@@ -116,6 +116,7 @@ public class TauqWindow {
             );
         }
 
+        refreshScale();
         glfwSetWindowSizeLimits(window, 200, 200, GLFW_DONT_CARE, GLFW_DONT_CARE);
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1); // vsync
@@ -153,7 +154,24 @@ public class TauqWindow {
         glfwSetWindowSizeCallback(window, (l, width, height) -> {
             this.displayWidth = width;
             this.displayHeight = height;
+            refreshScale();
+            refreshDimensions();
         });
+    }
+
+    private void refreshDimensions() {
+        mainTPanel.setWidth(displayWidth);
+        mainTPanel.setHeight(displayHeight);
+    }
+
+    private void refreshScale() {
+        try (MemoryStack memoryStack = MemoryStack.stackPush()) {
+            FloatBuffer xScale = memoryStack.mallocFloat(1);
+            FloatBuffer yScale = memoryStack.mallocFloat(1);
+            GLFW.glfwGetWindowContentScale(window, xScale, yScale);
+            scaleWidth = xScale.get();
+            scaleHeight = yScale.get();
+        }
     }
 
     private TauqWindow getInstance() {
@@ -178,16 +196,20 @@ public class TauqWindow {
         return eventHandlers;
     }
 
-    public Thread getRenderThread() {
-        return renderThread;
-    }
-
     public int getDisplayWidth() {
         return displayWidth;
     }
 
     public int getDisplayHeight() {
         return displayHeight;
+    }
+
+    public int getScaledDisplayWidth() {
+        return (int) (displayWidth * scaleWidth);
+    }
+
+    public int getScaledDisplayHeight() {
+        return (int) (displayHeight * scaleHeight);
     }
 
     public TPanel getMainPanel() {

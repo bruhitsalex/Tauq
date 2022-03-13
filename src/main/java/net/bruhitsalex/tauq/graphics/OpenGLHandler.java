@@ -1,5 +1,5 @@
 package net.bruhitsalex.tauq.graphics;
-import net.bruhitsalex.tauq.graphics.utils.Rectangle;
+
 import net.bruhitsalex.tauq.misc.Log;
 import net.bruhitsalex.tauq.misc.LoggerType;
 import org.lwjgl.glfw.GLFW;
@@ -26,7 +26,7 @@ public class OpenGLHandler {
             GL11.glMatrixMode(GL11.GL_PROJECTION);
             GL11.glLoadIdentity();
             GL11.glOrtho(0f, parent.getDisplayWidth(), parent.getDisplayHeight(), 0f, 0f, 1f);
-            GL11.glViewport(0, 0, parent.getDisplayWidth(), parent.getDisplayHeight());
+            GL11.glViewport(0, 0, parent.getScaledDisplayWidth(), parent.getScaledDisplayHeight());
 
             render(parent);
 
